@@ -26,7 +26,7 @@
         </div>
         <footer class="footer" id="pagefooter">
             <div class="container">
-                <p class="text-muted">Copyright 2017 Hermes</p>
+                <p class="text-muted">Copyright 2017 Proyecto Hermes</p>
             </div>
         </footer>
 
