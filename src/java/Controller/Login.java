@@ -5,6 +5,8 @@
  */
 package Controller;
 
+import Model.QueryResultEnum;
+import Model.SQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,10 +14,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,22 +33,16 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean result = false;
-        String content = "";
-        try {
-          Class.forName("oracle.jdbc.driver.OracleDriver");
-          Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","HR","123queso");
-          Statement st = con.createStatement();
-          ResultSet rSet = st.executeQuery("select * from EMPLOYEES");
-          while(rSet.next()) {
-              content += "<br>" + rSet.getString("FIRST_NAME") + " " + rSet.getString("LAST_NAME");
-          }
-          result = true;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Get username and password
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        // Process connection request
+        SQLConnection con = new SQLConnection();
+        // Query
+        QueryResultEnum result = con.queryForLogin(username, password);
+        // Close connection
+        con.Close();
         
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -63,11 +55,7 @@ public class Login extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
             out.println("<p>");
-            if(result) {
-                out.println(content);
-            } else {
-                out.println("ERROR: Can't retrieve data from database!");
-            }
+            out.println(processResult(result));
             out.println("</p>");
             out.println("</body>");
             out.println("</html>");
@@ -112,5 +100,20 @@ public class Login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private String processResult(QueryResultEnum result) {
+        switch(result) {
+            case SQLERROR:
+                return "Error al realizar la conexión con el servidor.";
+            case SUCCESS:
+                return "Bienvenido usuario, redireccionando a página principal.";
+            case WRONGUSERNAME:
+            case WRONGPASSWORD:
+                return "Combinación de usuario y contraseña inválidos.";
+            default:
+                break;
+        }
+        return "Respuesta inválida/no soportada.";
+    }
 
 }
