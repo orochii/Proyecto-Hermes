@@ -34,13 +34,14 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get username and password
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String username = request.getParameter("user");
+        String password = request.getParameter("pass");
         
         // Process connection request
         SQLConnection con = new SQLConnection();
         // Query
-        QueryResultEnum result = con.queryForLogin(username, password);
+        QueryResultEnum result = con.queryAuthenticateUser(username, password);
+        con.queryChangePassword(username, password);
         // Close connection
         con.Close();
         
@@ -108,6 +109,7 @@ public class Login extends HttpServlet {
             case SUCCESS:
                 return "Bienvenido usuario, redireccionando a página principal.";
             case WRONGUSERNAME:
+                return "El usuario no existe en la base de datos.";
             case WRONGPASSWORD:
                 return "Combinación de usuario y contraseña inválidos.";
             default:

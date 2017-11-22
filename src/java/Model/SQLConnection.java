@@ -16,16 +16,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SQLConnection {
+    // Connection strings
     private static String DRIVER_CONNECTION = "jdbc:oracle:thin:@localhost:1521:XE";
-    private static String DB_USERNAME = "HR";
+    private static String DB_USERNAME = "hermes";
     private static String DB_PASSWORD = "123queso";
-    
+    // Query strings
+    public static String QUERY_AUTHENTICATE = "select NOMBRE_USUARIO,CONTRASENA from USUARIO where NOMBRE_USUARIO = '%s'"; // username
+    public static String QUERY_CHANGEPASS = "update USUARIO set CONTRASENA = '%s' where NOMBRE USUARIO = '%s'"; // username, password
+   
     private Connection con;
     
     public SQLConnection() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","HR","123queso");
+            con = DriverManager.getConnection(DRIVER_CONNECTION,DB_USERNAME,DB_PASSWORD);
         } catch (SQLException ex) {
             Logger.getLogger(SQLConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -33,12 +37,15 @@ public class SQLConnection {
         }
     }
     
-    public QueryResultEnum queryForLogin(String username, String password) {
+    public QueryResultEnum queryAuthenticateUser(String username, String password) {
         try {
-            ResultSet rSet = doQuery("select NOMBRE_USUARIO,CONTRASENA from USUARIOS where NOMBRE_USUARIO = " + username);
+            String query = String.format(QUERY_AUTHENTICATE, username);
+            ResultSet rSet = doQuery(query);
+            
             if(rSet != null && rSet.next()) {
                 String realPass = rSet.getString("CONTRASENA");
-                String checkPass= MD5Generator.GetMD5(password);
+                System.out.println(realPass);
+                String checkPass = MD5Generator.GetMD5(password);
                 if(realPass.equals(checkPass)) return QueryResultEnum.SUCCESS; // Password correcto. Establecer conexión.
                 else return QueryResultEnum.WRONGPASSWORD; // Password inválido.
             }
@@ -47,6 +54,16 @@ public class SQLConnection {
             Logger.getLogger(SQLConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return QueryResultEnum.SQLERROR; // Problema al establecer conexión con servidor.
+    }
+    
+    public QueryResultEnum queryChangePassword(String username, String password) {
+        
+        String newPass = MD5Generator.GetMD5(password);
+        String query = String.format(QUERY_CHANGEPASS, newPass, username);
+        
+        ResultSet rSet = doQuery(query);
+        if(rSet != null) return QueryResultEnum.SUCCESS; // Password correcto. Establecer conexión.
+        else return QueryResultEnum.SQLERROR;
     }
     
     public void Close() {
@@ -59,6 +76,7 @@ public class SQLConnection {
     
     private ResultSet doQuery(String query) {
         try {
+          System.out.println(query);
           Statement st = con.createStatement();
           ResultSet rSet = st.executeQuery(query);
           return rSet;

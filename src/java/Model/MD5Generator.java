@@ -33,4 +33,8 @@ public class MD5Generator {
         }
         return "00000000000000000000000000000000";
     }
+    
+    public static String GetFalseMD5() {
+        return "00000000000000000000000000000000";
+    }
 }

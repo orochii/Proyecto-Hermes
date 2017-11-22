@@ -68,7 +68,7 @@ create table CLIENTE
    NUMERO_DEPENDIENTES  NUMBER(2)            not null
       constraint CKC_NUMERO_DEPT_CLIENTE check (Numero_Dependientes >= 0),
    VENCIMIENTO_IDENTIFICACION DATE                
-      constraint CKC_VENCIMIENTO_ID_CLIENTE check (VENCIMIENTO_IDENTIFICACION is null or (VENCIMIENTO_IDENTIFICACION >= SYSDATE)),
+      constraint CKC_VENCIMIENTO_ID_CLIENTE check ((VENCIMIENTO_IDENTIFICACION is null) or (VENCIMIENTO_IDENTIFICACION >= SYSDATE)),
    constraint PK_CLIENTE primary key (NUMERO_IDENTIFICACION, TIPO_IDENTIFICACION)
          using index tablespace TS_INDEX
 )
