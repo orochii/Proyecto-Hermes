@@ -21,8 +21,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Lord of Nightmares
  */
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "IndexRedirect", urlPatterns = {"/"})
+public class IndexRedirect extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,41 +35,28 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get username and password
-        String username = request.getParameter("user");
-        String password = request.getParameter("pass");
-        
-        // Process connection request
-        SQLConnection con = new SQLConnection();
-        // Query
-        QueryResultEnum result = con.queryAuthenticateUser(username, password);
-        //con.queryChangePassword(username, password);
-        // Close connection
-        con.Close();
-        request.setAttribute("message", resultString(result));
-        request.setAttribute("redirect", "/Proyecto-Hermes");
+        if(authenticateUser(request)) {
+            // If user is authenticated, redirect to lobby.jsp
+            RequestDispatcher rd = request.getRequestDispatcher("lobby.jsp");
+            rd.forward(request, response);
+        } else {
+            // If user isn't authenticated, redirect to login.jsp
+            RequestDispatcher rd = request.getRequestDispatcher("dologin.jsp");
+            rd.forward(request, response);
+        }
+    }
+    
+    private boolean authenticateUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        session.setAttribute("username", username);
-        session.setAttribute("password", password);
-        RequestDispatcher rd = request.getRequestDispatcher("redirect.jsp");
-        rd.forward(request, response);
-        
-//        response.setContentType("text/html;charset=UTF-8");
-//        try (PrintWriter out = response.getWriter()) {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet Login</title>");            
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
-//            out.println("<p>");
-//            out.println();
-//            out.println("</p>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
+        String username = (String) session.getAttribute("username");
+        if(username != null && !username.isEmpty()) {
+            String password = (String) session.getAttribute("password");
+            SQLConnection con = new SQLConnection();
+            QueryResultEnum result = con.queryAuthenticateUser(username, password);
+            con.Close();
+            if(result==QueryResultEnum.SUCCESS) return true;
+        }
+        return false;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -111,21 +98,4 @@ public class Login extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private String resultString(QueryResultEnum result) {
-        switch(result) {
-            case SQLERROR:
-                return "Error al realizar la conexión con el servidor.";
-            case USERINACTIVE:
-                return "La cuenta a la que se ha intentado acceder está inactiva.";
-            case SUCCESS:
-                return "Bienvenido usuario, redireccionando a página principal.";
-            case WRONGUSERNAME:
-                return "El usuario no existe en la base de datos.";
-            case WRONGPASSWORD:
-                return "Combinación de usuario y contraseña inválidos.";
-            default:
-                break;
-        }
-        return "Respuesta inválida/no soportada.";
-    }
 }
