@@ -23,6 +23,7 @@ public class SQLConnection {
     // Query strings
     public static String QUERY_AUTHENTICATE = "select NOMBRE_USUARIO,CONTRASENA,ESTADO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
     public static String QUERY_CHANGEPASS = "update USUARIO set CONTRASENA = '%s' where NOMBRE USUARIO = '%s'"; // username, password
+    public static String QUERY_GETACCESSLEVEL = "select NOMBRE_USUARIO,TIPO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
    
     private Connection con;
     
@@ -67,6 +68,39 @@ public class SQLConnection {
         ResultSet rSet = doQuery(query);
         if(rSet != null) return QueryResultEnum.SUCCESS; // Password correcto. Establecer conexión.
         else return QueryResultEnum.SQLERROR;
+    }
+    
+    public int queryUserAccessLevel(String username) {
+        String kind = queryUserKind(username);
+        if(kind != null) {
+            switch(kind) {
+                case "SUPER":
+                    return 9;
+                case "ADMIN":
+                    return 2;
+                case "OPER":
+                    return 1;
+                case "USER":
+                    return 0;
+                default:
+                    break;
+            }
+        }
+        return -1;
+    }
+    
+    public String queryUserKind(String username) {
+        try {
+            String query = String.format(QUERY_GETACCESSLEVEL, username);
+            ResultSet rSet = doQuery(query);
+            if(rSet != null && rSet.next()) {
+                String kind = rSet.getString("TIPO");
+                return kind;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public void Close() {

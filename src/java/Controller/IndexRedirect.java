@@ -38,6 +38,7 @@ public class IndexRedirect extends HttpServlet {
         
         if(authenticateUser(request)) {
             // If user is authenticated, redirect to lobby.jsp
+            
             RequestDispatcher rd = request.getRequestDispatcher("lobby.jsp");
             rd.forward(request, response);
         } else {
@@ -54,12 +55,14 @@ public class IndexRedirect extends HttpServlet {
             String password = (String) session.getAttribute("password");
             SQLConnection con = new SQLConnection();
             QueryResultEnum result = con.queryAuthenticateUser(username, password);
+            int accessLevel = con.queryUserAccessLevel(username);
+            request.setAttribute("accessLevel", accessLevel);
             con.Close();
             if(result==QueryResultEnum.SUCCESS) return true;
         }
         return false;
     }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
