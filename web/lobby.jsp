@@ -4,4 +4,6 @@
 <!DOCTYPE html>
 <t:basicpage title="Hermes - Comunicación">
     <b>Loggeado wiiii. Ahora empezar a meter tonterías aquí.</b>
+    <hr>
+    <a href="logoff">Cerrar sesión</a>
 </t:basicpage>

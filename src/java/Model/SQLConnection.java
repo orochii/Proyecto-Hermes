@@ -44,7 +44,6 @@ public class SQLConnection {
             
             if(rSet != null && rSet.next()) {
                 String realPass = rSet.getString("CONTRASENA");
-                System.out.println(realPass);
                 String checkPass = MD5Generator.GetMD5(password);
                 if(realPass.equals(checkPass)) {
                     String status = rSet.getString("ESTADO");
@@ -80,7 +79,6 @@ public class SQLConnection {
     
     private ResultSet doQuery(String query) {
         try {
-          System.out.println(query);
           Statement st = con.createStatement();
           ResultSet rSet = st.executeQuery(query);
           return rSet;

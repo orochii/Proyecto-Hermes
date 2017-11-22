@@ -5,8 +5,6 @@
  */
 package Controller;
 
-import Model.QueryResultEnum;
-import Model.SQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -21,8 +19,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Lord of Nightmares
  */
-@WebServlet(name = "IndexRedirect", urlPatterns = {"/"})
-public class IndexRedirect extends HttpServlet {
+@WebServlet(name = "Logoff", urlPatterns = {"/logoff"})
+public class Logoff extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,29 +33,19 @@ public class IndexRedirect extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("Log off!");
         
-        if(authenticateUser(request)) {
-            // If user is authenticated, redirect to lobby.jsp
-            RequestDispatcher rd = request.getRequestDispatcher("lobby.jsp");
-            rd.forward(request, response);
-        } else {
-            // If user isn't authenticated, redirect to login.jsp
-            RequestDispatcher rd = request.getRequestDispatcher("dologin.jsp");
-            rd.forward(request, response);
-        }
-    }
-    
-    private boolean authenticateUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
-        if(username != null && !username.isEmpty()) {
-            String password = (String) session.getAttribute("password");
-            SQLConnection con = new SQLConnection();
-            QueryResultEnum result = con.queryAuthenticateUser(username, password);
-            con.Close();
-            if(result==QueryResultEnum.SUCCESS) return true;
-        }
-        return false;
+        String user = (String) session.getAttribute("username");
+        session.removeAttribute("username");
+        session.removeAttribute("password");
+        session.invalidate();
+        String message = "No había sesión activa. Volviendo al lobby.";
+        if(user != null && !user.isEmpty()) message = String.format("Cerrando sesión. ¡Hasta luego %s!", user);
+        request.setAttribute("message", message);
+        request.setAttribute("redirect", "/Proyecto-Hermes");
+        RequestDispatcher rd = request.getRequestDispatcher("redirect.jsp");
+        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
