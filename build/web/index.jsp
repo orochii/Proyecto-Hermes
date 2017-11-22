@@ -2,7 +2,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <t:basicpage title="Hermes - Comunicación">
-    ¡Bienvenido a Hermes!
+    ¡Bienvenido a Hermes! Por favor, introduzca sus <s>datos de tarjeta de crédito para scammearlo</s> credenciales de inicio de sesión.
     <br><br>
     <form action="login" method="post">
         <input type="text" name="user" placeholder="Introduzca usuario">
