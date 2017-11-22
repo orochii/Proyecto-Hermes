@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Lord of Nightmares
  */
-@WebServlet(name = "IndexRedirect", urlPatterns = {"/"})
+@WebServlet(name = "IndexRedirect", urlPatterns = {"/index.jsp"})
 public class IndexRedirect extends HttpServlet {
 
     /**

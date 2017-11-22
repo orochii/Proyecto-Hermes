@@ -3,11 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Documentos/NetBeansProjects/Hermes/web/main.css</file>
-            <file>file:/D:/Documentos/NetBeansProjects/Hermes/src/java/Controller/Login.java</file>
-            <file>file:/D:/Documentos/NetBeansProjects/Hermes/web/index.jsp</file>
-            <file>file:/D:/Documentos/NetBeansProjects/Hermes/web/WEB-INF/tags/basicpage.tag</file>
-            <file>file:/D:/Documentos/NetBeansProjects/Hermes/src/java/Model/MD5Generator.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/web/redirect.jsp</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/web/dologin.jsp</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/web/lobby.jsp</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/web/js/functions.js</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/web/WEB-INF/tags/basicpage.tag</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/src/java/Model/QueryResultEnum.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/src/java/Controller/Login.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/src/java/Controller/Logoff.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/src/java/Controller/IndexRedirect.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/web/css/main.css</file>
+            <file>file:/D:/Documentos/NetBeansProjects/Hermes/Proyecto-Hermes/src/java/Model/SQLConnection.java</file>
         </group>
     </open-files>
 </project-private>

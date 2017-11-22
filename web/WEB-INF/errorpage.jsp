@@ -3,8 +3,6 @@
 
 <!DOCTYPE html>
 <t:basicpage title="Hermes - Comunicación">
-    <b>Bienvenido ${username}.</b>
-    <b>Loggeado wiiii. Ahora empezar a meter tonterías aquí.</b>
-    <hr>
-    <a href="logoff">Cerrar sesión</a>
+    <meta http-equiv="refresh" content="3;url=/Proyecto-Hermes" />
+    <b>Error 404 - No se encuentra el recurso, redireccionando a la página principal.</b>
 </t:basicpage>

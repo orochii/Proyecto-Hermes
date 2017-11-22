@@ -1,0 +1,136 @@
+Normalización y Dependencias Funcionales
+========================================
+
+Estandarizar
+Afinar el modelo
+
+Los modelos matemáticos relacionales tienen una deficiencia, y es la imposibilidad de evitar redundancias, . Se hizo un modelo normalizativo para tratar de afinar el modelo relacional.
+Dependencia funcional. Dirigida a la funcionalidad semántica con respecto a la dependencia en la relación. Cómo están determinados dentro de las relaciones.
+La normalización, si bien es cierto tiene receta de cocina, algunos procesos que podemos usar para poder aplicar la norma, también debemos considerar que existe como un diagnóstico.
+Igualmente el diseñador debe aplicar normalización de una forma analítica y estudiada del modelo. Se tiene que analizar las tablas, no obviarlo.
+
+Teniendo esos dos conceptos (optimización, afinación, normalización del modelo) y dependencia funcional (la forma en que se comportan los elementos en el modelo).
+
+Exiten anteriores a la normalización, las pautas informales. Son cosas que se pueden hacer antes de la normalización.
+
+1ra Forma Normal
+2da Forma Normal
+3ra Forma Normal
+Forma Normal de Boyce y Cott (3 bis o perfeccionada).
+
+La 4 tiene qué ver con criterios multivaluados y la 5 con 
+Crean un modelo sumamente grande y a veces incontrolable y son más para sistemas basados en objetos (?).
+En la calle se llega sólo a 3 y 3 bis.
+
+Paréntesis: En BigData y Analitics se tiende a usar modelos desnormalizados.
+
+Mientras el modelo sea más grande, la normalización se vuelve más exhaustiva. ¿Para qué normalizar? Optimizar. Se necesita volver las cosas más simples.
+1. Transformar datos complejos en estructuras de datos pequeñas, simples, estables y de fácil mantenimiento.
+2. Disminución de problemas de lógica sobre los datos (sum, average, count, union, etc).
+3. Facilidad de entendimiento al simplificas las estructuras.
+4. Optimización del uso de espacio de almacenamiento, al eliminar la redundancia innecesaria.
+
+Mejorando el MR
+- ¿Cuál agrupación de atributos es mejor?
+- ¿Cómo puedo mejorar mi modelo relacional?
+Hay dos niveles de mejoramiento del MR:
+	Lógico. El modelo lógico conceptual.
+	Almacenamiento. El modelo físico de almacenamiento.
+2 enfoques para diseño de BD:
+	Ascendente: Relaciones entre atributos individuales para generar nuevas tablas.
+	Descendente: Análisis de agrupaciones de atributos en tablas y lograr descomponer en más tablas o relaciones.
+
+Pautas informales para el mejoramiento de las relaciones - Pautas informales para diseño de calidad en esquemas de relación o tablas
+==========
+1. Semántica de los Atributos:
+	Los atributos deben expresar el significado de la tabla (relación).
+	Debe diseñar una tabla que sea fácil de explicar su significado.
+		No combinar atributos de varias entidades y relaciones (semántica confusa).
+2. Información redundante en tuplas y anomalías de actualización:
+	Minimizar el espacio de almacenamiento.
+	Anomalías de actualización en tablas de con atributos de varias entidades:
+		Anomalías de inserción.
+		Anomalías de eliminación.
+		Anomalías de modificación.
+	Hay que diseñar tablas o relaciones sin anomalías de actualización.
+	Si se ocupa redundancia mejor usar vistas para reunir atributos de != entidades o relaciones.
+3. Valores nulos en tuplas.
+	Problemas de REUNION y de SUM y COUNT.
+	Dificulta entendimiento del significado de los atributos.
+	Evitar poner atributos con valores nulos en las tablas, y si se dan que sean casos excepcionales.
+4. Generación de tuplas espurias (sucias):
+	Información espuria es información errónea.
+	Realizar tablas relacionadas mediante llaves primarias y/o foráneas para evitar tuplas espurias.
+
+Ejemplo de Tabla
+*AUTOR		NACIONALIDAD	*COD.LIBRO	TITuLO		EDITORIAL	AÑO
+Date, C.	Norteamericana	898989		Database	Addison		1990
+Date, C.	Norteamericana	898988		SQL Stan	Addison, W.	1990
+Date, C.	Norteamericana	898987		Guide for	Addison, W.	1990
+(etc)
+
+1. La tabla almacena datos de libros y autores.
+2. Existe alta redundancia
+3. Anomalías de modificación
+4. Anomalías de inserción
+5. Anomalías de borrado
+
+Hechos distintos deben almacenarse en objetos distintos.
+
+Normalización
+=======
+Basada en Claves Primarias y Claves Candidatas así como las Dependencias Funcionales.
+Codd 1972 dice que normalizar es poner en prueba un esuqema de relación o tabla para verificar su estado normal.
+
+1 FN -> Lógica relacional
+2 FN -
+3 FN -
+FNBC -> Dependencias funcionales
+4 FN -> Dependencias multivaluadas
+5 FN -> Dependencias de Reunión
+
+¿Qué logra la normalización?
+	Minimizar redundancias (ahorra espacio de almacenamiento
+	Minimiza anomalías de inserción, eliminación y actualización
+	Penaliza las consultas al disminuir la eficiencia.
+	
+Normalización - 1FN
+==========
+¿Qué es la 1 FN?
+	Prohube atributos multivaluados y compuestos o su combinación.
+	Cada dominio de atributo debe solo poseer valores atómicos e indivisibles.
+	La 1FN elimina los grupos repetidos (VALORES repetidos).
+	
+	Ejemplo.
+		1. ¿Cuál de los atributos funciona como PK?
+		2. ¿Hay atributos multivaluados o compuestos?
+		3. Se evidencia grupos repetitivos para {NUM_ITEM, DESC_ITEM, CANT, PRECIO}
+	Solución:
+		1. Crear una tabla o relación para eliminar los grupos repetidos.
+		2. Crear una tabla o relación para los campos reptitivos + PK de la tabla origen.
+		
+Normalización - 2FN
+==========
+¿Qué es la 2 FN?
+	Una tabla está 2 FN si está en 1FN.
+	Todas las dependencias parciales deben eliminarse. Osea todo atributo que no forma parte de ninguna llave (NO primos), debe ser determinado por la llave primaria COMPLETA.
+	La dependencia funcional está relacionada con la semántica o significado del dato en la relación.
+	Una tabla con un único atributo como llave primaria está en 2FN. Dicho de otra manera, cuando hay relaciones o tables con llaves primarias compuestas (múltiples atributos) se debe revisar la 2FN.
+"1ra porque ya está solita (?), 2da porque todos los atributos dependen de la llave completa."
+	
+Normalización - 3FN
+==========
+¿Qué es la 3FN?
+	Una tabla está en 3FN si está en 2FN.
+	Todos los atributos NO PRIMOS son determinados completamente por la llave primaria, y no por ningún otro atributo NO PRIMO.
+
+Normalización - FNBC
+==========
+¿Qué es la FNBC?
+	Es una extensión de la 3FN. Vista como la 3FN más estricta.
+	Toda tabla en FNBC está en 3FN pero toda tabla en 3FN no necesariamente está en FNBC.
+	una tabla o relación está en FNBC si presenta las sigueintes característias:
+		1. La relación o tabla tiene varias llaves candidatas.
+		2. Estas llaves candidatas son compuestas (con 2 o más atributos que las componen).
+		3. Esas claves candidateas se solapan (o sea, tienen al menos un atributo en común).
+	Si la tabla no tiene estas tres condiciones, su estado es el de 3FN y no es necesario aplicar la evaluación de FNBC.
