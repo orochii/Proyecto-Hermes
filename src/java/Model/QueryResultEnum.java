@@ -13,5 +13,6 @@ public enum QueryResultEnum {
     SQLERROR,
     SUCCESS,
     WRONGUSERNAME,
-    WRONGPASSWORD
+    WRONGPASSWORD,
+    USERINACTIVE
 }

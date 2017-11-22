@@ -9,11 +9,13 @@ import Model.QueryResultEnum;
 import Model.SQLConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,23 +46,30 @@ public class Login extends HttpServlet {
         con.queryChangePassword(username, password);
         // Close connection
         con.Close();
+        request.setAttribute("message", resultString(result));
+        request.setAttribute("redirect", "/Proyecto-Hermes");
+        HttpSession session = request.getSession();
+        session.setAttribute("username", username);
+        session.setAttribute("password", password);
+        RequestDispatcher rd = request.getRequestDispatcher("redirect.jsp");
+        rd.forward(request, response);
         
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
-            out.println("<p>");
-            out.println(processResult(result));
-            out.println("</p>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+//        response.setContentType("text/html;charset=UTF-8");
+//        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet Login</title>");            
+//            out.println("</head>");
+//            out.println("<body>");
+//            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+//            out.println("<p>");
+//            out.println();
+//            out.println("</p>");
+//            out.println("</body>");
+//            out.println("</html>");
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -102,10 +111,12 @@ public class Login extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private String processResult(QueryResultEnum result) {
+    private String resultString(QueryResultEnum result) {
         switch(result) {
             case SQLERROR:
                 return "Error al realizar la conexión con el servidor.";
+            case USERINACTIVE:
+                return "La cuenta a la que se ha intentado acceder está inactiva.";
             case SUCCESS:
                 return "Bienvenido usuario, redireccionando a página principal.";
             case WRONGUSERNAME:
@@ -117,5 +128,4 @@ public class Login extends HttpServlet {
         }
         return "Respuesta inválida/no soportada.";
     }
-
 }

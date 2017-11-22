@@ -21,7 +21,7 @@ public class SQLConnection {
     private static String DB_USERNAME = "hermes";
     private static String DB_PASSWORD = "123queso";
     // Query strings
-    public static String QUERY_AUTHENTICATE = "select NOMBRE_USUARIO,CONTRASENA from USUARIO where NOMBRE_USUARIO = '%s'"; // username
+    public static String QUERY_AUTHENTICATE = "select NOMBRE_USUARIO,CONTRASENA,ESTADO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
     public static String QUERY_CHANGEPASS = "update USUARIO set CONTRASENA = '%s' where NOMBRE USUARIO = '%s'"; // username, password
    
     private Connection con;
@@ -46,7 +46,11 @@ public class SQLConnection {
                 String realPass = rSet.getString("CONTRASENA");
                 System.out.println(realPass);
                 String checkPass = MD5Generator.GetMD5(password);
-                if(realPass.equals(checkPass)) return QueryResultEnum.SUCCESS; // Password correcto. Establecer conexión.
+                if(realPass.equals(checkPass)) {
+                    String status = rSet.getString("ESTADO");
+                    if(status.equalsIgnoreCase("INACTIVO")) return QueryResultEnum.USERINACTIVE;
+                    return QueryResultEnum.SUCCESS;
+                } // Password correcto. Establecer conexión.
                 else return QueryResultEnum.WRONGPASSWORD; // Password inválido.
             }
             return QueryResultEnum.WRONGUSERNAME; // Nombre de usuario inválido.
