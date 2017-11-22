@@ -46,3 +46,7 @@ tablespace TS_DATA
 /* Identificador consecutivo */
 create sequence auditoria_seq start with 1
 /
+
+insert into USUARIO(NOMBRE_USUARIO,CONTRASENA,TIPO,ESTADO,TIPO_IDENTIFICACION,NUMERO_IDENTIFICACION) 
+            values('superuser','81dc9bdb52d04dc20036dbd8313ed055','SUPER','OFFLINE','NAC','2123456')
+/
