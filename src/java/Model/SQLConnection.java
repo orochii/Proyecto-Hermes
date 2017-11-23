@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import oracle.jdbc.OracleTypes;
 
 public class SQLConnection {
 
@@ -251,10 +252,16 @@ public class SQLConnection {
     }
 
     public QueryResultEnum querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
-            CallableStatement st = con.prepareCall("exec SELECT_CLIENTE(?, ?)");
-          st.setString(1, tipoIdent);
-          st.setInt(2, numeroIdent);
+            System.out.println("hola");
+        CallableStatement st = con.prepareCall("exec SELECT_CLIENTE(?, ?)");
+          st.registerOutParameter(1, OracleTypes.OTHER);
+            st.setString(2, tipoIdent);
+          st.setInt(3, numeroIdent);
+         
           st.execute();
+          ResultSet rs = (ResultSet) st.getObject(1);
+          String value = rs.getString(2);
+	  System.out.println(value);
           //  System.out.println("Primera "st);
           
            // RowSet rSet = doQuery(query);

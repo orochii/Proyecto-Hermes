@@ -9,6 +9,9 @@ import Model.QueryResultEnum;
 import Model.SQLConnection;
 import Model.TypeParser;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +37,7 @@ public class InsertCampania extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         String codigo = request.getParameter("codigoCamp");
         String descripcion = request.getParameter("descripcionCamp");
         String estado = request.getParameter("estadoCamp");
@@ -47,9 +50,9 @@ public class InsertCampania extends HttpServlet {
             QueryResultEnum result;
             System.out.println(codigo);
             SQLConnection con = new SQLConnection();
-            result = con.queryInsertCampania(codigo, descripcion, estado, proposito, nombre, tipo);
+       //     result = con.queryInsertCampania(codigo, descripcion, estado, proposito, nombre, tipo);
             con.close();
-            request.setAttribute("message", result.name());
+   //         request.setAttribute("message", result.name());
         }
 
         if (authenticateUser(request)) {
@@ -63,7 +66,7 @@ public class InsertCampania extends HttpServlet {
         }
     }
 
-    private boolean authenticateUser(HttpServletRequest request) {
+    private boolean authenticateUser(HttpServletRequest request) throws SQLException {
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
         if (username != null && !username.isEmpty()) {
@@ -90,7 +93,11 @@ public class InsertCampania extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(InsertCampania.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -104,7 +111,11 @@ public class InsertCampania extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(InsertCampania.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
