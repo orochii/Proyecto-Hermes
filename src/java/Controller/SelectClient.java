@@ -6,6 +6,7 @@
 package Controller;
 
 import Model.QueryResultEnum;
+import Model.RowSet;
 import Model.SQLConnection;
 import Model.TypeParser;
 import java.io.IOException;
@@ -40,25 +41,42 @@ public class SelectClient extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException, ParseException, SQLException {
+            throws ServletException, IOException, ParseException, SQLException {
         String tipoIdent = request.getParameter("tipoIdent");
         int numeroIdent = TypeParser.parseInt(request.getParameter("numeroIdent"));
-        if(tipoIdent != null && numeroIdent != 0) {
-            QueryResultEnum result;
-            System.out.println("Llego aca" + numeroIdent);
+        RowSet result = null;
+        if (tipoIdent != null && numeroIdent != 0) {
             SQLConnection con = new SQLConnection();
             result = con.querySelectClient(tipoIdent, numeroIdent);
             con.close();
-            
-           // request.setAttribute("message", result.name());
+            if (!result.success()) {
+                request.setAttribute("message", QueryResultEnum.SQLERROR);
+            }
         }
-        
+
         if (authenticateUser(request)) {
-            // If user is authenticated, redirect to lobby.jsp
-            RequestDispatcher rd = request.getRequestDispatcher("selectClient.jsp");
-            rd.forward(request, response);
+            if(result != null) {
+                request.setAttribute("tipoIdent",result.getString("TIPO_IDENTIFICACION"));
+                request.setAttribute("numIdent", result.getString("NUMERO_IDENTIFICACION"));
+                request.setAttribute("codPostal",result.getString("CODIGO_POSTAL_CLIENTE"));
+                request.setAttribute("nomClient",result.getString("NOMBRE_CLIENTE"));
+                request.setAttribute("estCivil",result.getString("ESTADO_CIVIL"));
+                request.setAttribute("email",result.getString("EMAIL"));
+                request.setAttribute("fechaNac",result.getString("FECHANACIMIENTO"));
+                request.setAttribute("sexo",result.getString("SEXO"));
+                request.setAttribute("nacional",result.getString("NACIONALIDAD"));
+                request.setAttribute("tResidDom",result.getString("TIEMPO_RESIDENCIA_DOMICILIO"));
+                request.setAttribute("numDepend",result.getString("NUMERO_DEPENDIENTES"));
+                request.setAttribute("vencIdent",result.getString("VENCIMIENTO_IDENTIFICACION"));
+                RequestDispatcher rd = request.getRequestDispatcher("showClient.jsp");
+                rd.forward(request, response);
+            } else {
+                // If user is authenticated, redirect to lobby.jsp
+                RequestDispatcher rd = request.getRequestDispatcher("selectClient.jsp");
+                rd.forward(request, response);
+            }
+            
         } else {
             // If user isn't authenticated, redirect to login.jsp
             RequestDispatcher rd = request.getRequestDispatcher("dologin.jsp");
@@ -80,7 +98,7 @@ public class SelectClient extends HttpServlet {
         }
         return false;
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
