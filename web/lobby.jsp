@@ -20,13 +20,15 @@
     </c:if>
     <c:if test="${accessLevel > 1}">
         <p>Zona de Administrador</p>
+       
         <hr>
     </c:if>
     <c:if test="${accessLevel > 5}">
         <p>Zona de Superusuario</p>
         <a href="insertBillingCycle">Insertar ciclo facturable</a><br>
-        <a href="insertCampania">Insertar Campaña</a><br>
+         <a href="insertClient.jsp">Insertar Cliente</a><br>
         <a href="uploadDirections">Subir direcciones</a><br>
+        <a href="selectClient.jsp">Buscar Cliente</a><br>
         <hr>
     </c:if>
 </t:basicpage>

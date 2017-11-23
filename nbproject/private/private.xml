@@ -3,32 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Controller/Logoff.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Controller/InsertCampania.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/main.css</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Model/QueryResultEnum.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/css/main.css</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Controller/ChangePassword.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Model/RowSet.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Model/DirectionReader.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Controller/Login.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/normalizacion-notas.txt</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/redirect.jsp</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/changePassword.jsp</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/insertBillingCycle.jsp</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Model/MD5Generator.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Model/SQLConnection.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/insertCampania.jsp</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Controller/UploadDirections.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/dologin.jsp</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Model/TypeParser.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/WEB-INF/errorpage.jsp</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/lobby.jsp</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/js/functions.js</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Controller/InsertBillingCycle.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/src/java/Controller/IndexRedirect.java</file>
-            <file>file:/C:/Users/EJRH2/Documents/GitHub/Proyecto-Hermes/web/uploadDirections.jsp</file>
+            <file>file:/C:/Users/aleli/Desktop/Proyecto-Hermes/src/java/Controller/InsertClient.java</file>
+            <file>file:/C:/Users/aleli/Desktop/Proyecto-Hermes/src/java/Model/SQLConnection.java</file>
         </group>
     </open-files>
 </project-private>
