@@ -7,9 +7,13 @@ package Controller;
 
 import Model.QueryResultEnum;
 import Model.SQLConnection;
+import Model.TypeParser;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -24,8 +28,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Lord of Nightmares
  */
-@WebServlet(name = "ChangePassword", urlPatterns = {"/changePassword"})
-public class ChangePassword extends HttpServlet {
+@WebServlet(name = "SelectClient", urlPatterns = {"/selectClient"})
+public class SelectClient extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,45 +40,24 @@ public class ChangePassword extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        // Obtiene contraseñas escritas.
-        String oldPassword = (String) request.getParameter("oldPass");
-        String newPassword = (String) request.getParameter("newPass");
-        // Verifica que se haya enviado el formulario
-        if (oldPassword != null && newPassword != null) {
-            // Inicializa resultado.
+          throws ServletException, IOException, ParseException, SQLException {
+        String tipoIdent = request.getParameter("tipoIdent");
+        int numeroIdent = TypeParser.parseInt(request.getParameter("numeroIdent"));
+        if(tipoIdent != null && numeroIdent != 0) {
             QueryResultEnum result;
-            // Verifica que los campos no estén vacíos
-            if (!oldPassword.isEmpty()) {
-                if (!oldPassword.isEmpty()) {
-                    // Obtiene datos de sesión.
-                    HttpSession session = request.getSession();
-                    String username = (String) session.getAttribute("username");
-                    // Autentica usuario con contraseña introducida (por verificaciòn)
-                    if (authenticateUser(request, username, oldPassword)) {
-                        // Crea conexión y efectúa cambio de contraseña
-                        SQLConnection con = new SQLConnection();
-                        result = con.queryChangePassword(username, newPassword);
-                        con.close();
-                    } else {
-                        result = QueryResultEnum.WRONGPASSWORD;
-                    }
-                } else {
-                    result = QueryResultEnum.NODATA;
-                }
-            } else {
-                result = QueryResultEnum.WRONGPASSWORD;
-            }
-
-            if (result != QueryResultEnum.SUCCESS) {
-                request.setAttribute("message", result.name());
-            }
+            System.out.println("Llego aca" + numeroIdent);
+            SQLConnection con = new SQLConnection();
+            result = con.querySelectClient(tipoIdent, numeroIdent);
+            con.close();
+            
+           // request.setAttribute("message", result.name());
         }
-
+        
         if (authenticateUser(request)) {
             // If user is authenticated, redirect to lobby.jsp
-            RequestDispatcher rd = request.getRequestDispatcher("changePassword.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("selectClient.jsp");
             rd.forward(request, response);
         } else {
             // If user isn't authenticated, redirect to login.jsp
@@ -97,19 +80,7 @@ public class ChangePassword extends HttpServlet {
         }
         return false;
     }
-
-    private boolean authenticateUser(HttpServletRequest request, String username, String password) throws SQLException {
-        if (username != null && !username.isEmpty()) {
-            SQLConnection con = new SQLConnection();
-            QueryResultEnum result = con.queryAuthenticateUser(username, password);
-            con.close();
-            if (result == QueryResultEnum.SUCCESS) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -124,8 +95,10 @@ public class ChangePassword extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(InsertClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InsertClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -142,8 +115,10 @@ public class ChangePassword extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(InsertClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InsertClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

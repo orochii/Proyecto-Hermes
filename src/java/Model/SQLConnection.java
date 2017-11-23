@@ -11,6 +11,8 @@ package Model;
  */
 import Controller.Login;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,10 +37,15 @@ public class SQLConnection {
     // Para formar el query, simplemente añaden BEGIN al inicio y ;END; al final. Fue lo más que logré acortarlo sin que explotara.
     // Y le quitan eso del tipo de dato. Es básicamente como llamar una función en Java.
     public static String QUERY_INSERTBILLINGCYCLE = "BEGIN INSERT_CICLO_FACTURABLE('%s', '%s', %d, '%s', '%s', '%s');END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
+
+
+    
+    public static String QUERY_INSERTCLIENT = "BEGIN INSERT_CLIENTE('%s', %d, %d, '%s', '%s', '%s', %t, '%s', '%s', %d, %d, %t);END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
     
     private Connection con;
 
-    public SQLConnection() {
+    public SQLConnection() throws SQLException {
+      
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             con = DriverManager.getConnection(DRIVER_CONNECTION, DB_USERNAME, DB_PASSWORD);
@@ -162,6 +169,41 @@ public class SQLConnection {
         }
         return QueryResultEnum.SQLERROR;
     }
+    
+    
+        public QueryResultEnum queryInsertClient(String tipoIdent, int numeroIdent, int codigoPostal, String nombre, String estadoCivil, String email, String fechaNac, 
+            String sexo, String nacionalidad, int tiempoRec, int numeroDep, String fechaVenc) throws ParseException, SQLException {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date fechaNacFormat = formatter.parse(fechaNac);
+            java.util.Date fechaVencFormat = formatter.parse(fechaVenc);         
+            java.sql.Date fechaNacSql =  new java.sql.Date(fechaNacFormat.getTime());
+            java.sql.Date fechaVencSql = new java.sql.Date(fechaVencFormat.getTime());
+     //       String query = String.format(QUERY_INSERTCLIENT, tipoIdent, numeroIdent, codigoPostal, nombre, estadoCivil, email, "TO_DATE("+fechaNac+", 'dd/MM/yyyy')", sexo, nacionalidad, tiempoRec, numeroDep, "TO_DATE("+vencimientoIdent+", 'dd/MM/yyyy')");
+          CallableStatement st = con.prepareCall("exec INSERT_CLIENTE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          
+          st.setString(1, tipoIdent);
+          st.setInt(2, numeroIdent);
+          st.setInt(3, codigoPostal);
+          st.setString(4, nombre);
+          st.setString(5, estadoCivil);
+          st.setString(6, email);
+          st.setDate(7, (Date) fechaNacSql);
+          st.setString(8, sexo);
+          st.setString(9, nacionalidad);
+          st.setInt(10, tiempoRec);
+          st.setInt(11, numeroDep);
+          st.setDate(12, (Date) fechaVencSql);
+          st.execute();
+          //  System.out.println("Primera "st);
+          
+           // RowSet rSet = doQuery(query);
+      //  System.out.println(rSet.success());
+//        if(rSet != null && rSet.success()) {
+//            return QueryResultEnum.SUCCESS;
+//        }
+        return QueryResultEnum.SQLERROR;
+    }
+        
     public void close() {
         try {
             if (con != null && !con.isClosed()) {
@@ -173,8 +215,10 @@ public class SQLConnection {
     }
 
     private RowSet doQuery(String query) {
+
         System.out.println(query);
         try {
+
             Statement st = con.createStatement();
             try {
                 ResultSet rSet = st.executeQuery(query);
@@ -196,5 +240,28 @@ public class SQLConnection {
 
         return null;
     }
+    
+    public static java.sql.Date convertFromJAVADateToSQLDate(
+            java.util.Date javaDate) {
+        java.sql.Date sqlDate = null;
+        if (javaDate != null) {
+            sqlDate = new Date(javaDate.getTime());
+        }
+        return sqlDate;
+    }
 
+    public QueryResultEnum querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
+            CallableStatement st = con.prepareCall("exec SELECT_CLIENTE(?, ?)");
+          st.setString(1, tipoIdent);
+          st.setInt(2, numeroIdent);
+          st.execute();
+          //  System.out.println("Primera "st);
+          
+           // RowSet rSet = doQuery(query);
+      //  System.out.println(rSet.success());
+//        if(rSet != null && rSet.success()) {
+//            return QueryResultEnum.SUCCESS;
+//        }
+        return QueryResultEnum.SQLERROR;
+}
 }

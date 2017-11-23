@@ -5,6 +5,7 @@
  */
 package Model;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +41,7 @@ public class DirectionReader {
         }
     }
 
-    public QueryResultEnum uploadDirNames() {
+    public QueryResultEnum uploadDirNames() throws SQLException {
         // Si no hay direcciones por agregar, sale del método.
         if (directionsContainer == null) {
             return QueryResultEnum.NODATA;
