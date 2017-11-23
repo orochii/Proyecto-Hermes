@@ -29,7 +29,13 @@ public class SQLConnection {
     public static String QUERY_INSERTCANTON = "BEGIN INSERT_CANTON('%d', '%s');END;";
     public static String QUERY_INSERTDISTRICT = "BEGIN INSERT_DISTRITO('%d', '%s');END;";
     public static String QUERY_INSERTDIRECTION = "BEGIN INSERT_DIRECCION('%s', '%d', '%d', '%d');END;"; // zipcode, prov, distr, canton
-
+    
+    // Esta es la línea donde se define la stored procedure (la cabecera)
+    // INSERT_CICLO_FACTURABLE  (p_CODIGO_CICLO IN VARCHAR2,p_NOMBRE_CICLO IN VARCHAR2,p_TIEMPO_CICLO IN NUMBER,p_DESCRIPCION_CICLO IN VARCHAR2,p_DESCRIPCION_STATUS IN VARCHAR2,p_CODIGO_STATUS_CF IN VARCHAR2)
+    // Para formar el query, simplemente añaden BEGIN al inicio y ;END; al final. Fue lo más que logré acortarlo sin que explotara.
+    // Y le quitan eso del tipo de dato. Es básicamente como llamar una función en Java.
+    public static String QUERY_INSERTBILLINGCYCLE = "BEGIN INSERT_CICLO_FACTURABLE('%s', '%s', %d, '%s', '%s', '%s');END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
+    
     private Connection con;
 
     public SQLConnection() {
@@ -143,7 +149,19 @@ public class SQLConnection {
         }
         return QueryResultEnum.SQLERROR;
     }
-
+    
+    // Recuerden respetar el orden de las entradas de la función/stored procedure
+    // codCiclo, nombre, tiempociclo, descC, descStatus, codStatus
+    public QueryResultEnum queryInsertBillingCycle(String codCiclo, String nombre, int tiempoCiclo, String descCiclo, 
+            String descStatus, String codStatus) {
+        String query = String.format(QUERY_INSERTBILLINGCYCLE, codCiclo, nombre, tiempoCiclo, descCiclo, descStatus, codStatus);
+        RowSet rSet = doQuery(query);
+        System.out.println(rSet.success());
+        if(rSet != null && rSet.success()) {
+            return QueryResultEnum.SUCCESS;
+        }
+        return QueryResultEnum.SQLERROR;
+    }
     public void close() {
         try {
             if (con != null && !con.isClosed()) {
@@ -155,6 +173,7 @@ public class SQLConnection {
     }
 
     private RowSet doQuery(String query) {
+        System.out.println(query);
         try {
             Statement st = con.createStatement();
             try {

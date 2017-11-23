@@ -52,7 +52,7 @@ public class RowSet {
             success = true;
         } catch (SQLException ex) {
             Logger.getLogger(RowSet.class.getName()).log(Level.SEVERE, null, ex);
-            success = false;
+            success = (set != null);
         }
     }
 
