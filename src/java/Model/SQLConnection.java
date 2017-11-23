@@ -282,24 +282,46 @@ public class SQLConnection {
         return sqlDate;
     }
 
-    public QueryResultEnum querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
 
-            System.out.println("hola");
-        CallableStatement st = con.prepareCall("exec SELECT_CLIENTE(?, ?)");
-          st.registerOutParameter(1, OracleTypes.OTHER);
-            st.setString(2, tipoIdent);
-          st.setInt(3, numeroIdent);
-         
-          st.execute();
-          ResultSet rs = (ResultSet) st.getObject(1);
-          String value = rs.getString(2);
-	  System.out.println(value);
-          //  System.out.println("Primera "st);
-          
-           // RowSet rSet = doQuery(query);
-      //  System.out.println(rSet.success());
+    public RowSet querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
+//        String tipo = "";
+//        String numero = "";
+//        String codigoPostal = "";
+//        String nombre = "";
+//        String estado = "";
+//        String email = "";
+//        String fechaNac = "";
+//        String sexo = "";
+//        String nacionalidad = "";
+//        String tiempoRec = "";
+//        String NumeroDep = "";
+//        String vencimientoIdent = "";
 
+        CallableStatement st = con.prepareCall("{? = call SELECT_CLIENTE(?, ?)}");
+        st.registerOutParameter(1, OracleTypes.CURSOR);
+        st.setString(2, tipoIdent);
+        st.setInt(3, numeroIdent);
+        st.execute();
+        ResultSet rset = (ResultSet) st.getObject(1);
+        RowSet rowSet = new RowSet(rset);
+//        while (rset.next()) {
+//            tipo = rset.getString("TIPO_IDENTIFICACION");
+//            numero = rset.getString("NUMERO_IDENTIFICACION");
+//            codigoPostal = rset.getNString("CODIGO_POSTAL_CLIENTE");
+//            nombre = rset.getNString("NOMBRE_CLIENTE");
+//            estado = rset.getNString("ESTADO_CIVIL");
+//            email = rset.getNString("EMAIL");
+//            fechaNac = rset.getNString("FECHANACIMIENTO");
+//            sexo = rset.getNString("SEXO");
+//            nacionalidad = rset.getNString("NACIONALIDAD");
+//            tiempoRec = rset.getNString("TIEMPO_RESIDENCIA_DOMICILIO");
+//            NumeroDep = rset.getNString("NUMERO_DEPENDIENTES");
+//            vencimientoIdent = rset.getNString("VENCIMIENTO_IDENTIFICACION");
+//        }
+        
+        //   ResultSet rs = (ResultSet)st.getObject(3);
 
-        return QueryResultEnum.SQLERROR;
+        return rowSet;
+
     }
 }

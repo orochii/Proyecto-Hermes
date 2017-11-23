@@ -5,9 +5,11 @@
  */
 package Model;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -66,10 +68,15 @@ public class RowSet {
     
     public String getString(String column) {
         if(structure.isEmpty()) return null;
-        return (String) row(0).get(column);
+        Object data = row(0).get(column);
+        if(data instanceof BigDecimal) data = TypeParser.bDecToString((BigDecimal)data);
+        if(data instanceof Timestamp) data = TypeParser.tStampToString((Timestamp)data);
+        return (String) data;
     }
     
     public boolean success() {
         return success;
     }
+    
+    
 }

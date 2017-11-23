@@ -1,4 +1,11 @@
 /build/
 /nbproject/private/
 /dist/
+<<<<<<< HEAD
+nbproject/private/private.xml
+*.properties
 nbproject/private/private.properties
+nbproject/private/private.properties
+nbproject/private/private.xml
+=======
+>>>>>>> fe47f4761bad1dbac01ef6f66a5472de27c1a12c
