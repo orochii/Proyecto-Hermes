@@ -16,6 +16,7 @@
     </c:if>
     <c:if test="${accessLevel > 0}">
         <p>Zona de Operador</p>
+        <a href="createUser">Crear usuario</a>
         <hr>
     </c:if>
     <c:if test="${accessLevel > 1}">
