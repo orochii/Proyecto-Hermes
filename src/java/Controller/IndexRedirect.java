@@ -41,7 +41,7 @@ public class IndexRedirect extends HttpServlet {
         
         if(authenticateUser(request)) {
             // If user is authenticated, redirect to lobby.jsp
-            
+            //System.out.println(request.getAttribute("password"));
             RequestDispatcher rd = request.getRequestDispatcher("lobby.jsp");
             rd.forward(request, response);
         } else {
