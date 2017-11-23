@@ -14,5 +14,6 @@ public enum QueryResultEnum {
     SUCCESS,
     WRONGUSERNAME,
     WRONGPASSWORD,
-    USERINACTIVE
+    USERINACTIVE,
+    NODATA
 }

@@ -24,6 +24,8 @@
     </c:if>
     <c:if test="${accessLevel > 5}">
         <p>Zona de Superusuario</p>
+        <a href="uploadDirections">Subir direcciones</a>
+        <br>
         <hr>
     </c:if>
 </t:basicpage>
