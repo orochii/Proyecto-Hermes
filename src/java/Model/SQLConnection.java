@@ -27,7 +27,7 @@ public class SQLConnection {
     public static String QUERY_AUTHENTICATE = "select NOMBRE_USUARIO,CONTRASENA,ESTADO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
     public static String QUERY_CHANGEPASS = "update USUARIO set CONTRASENA = '%s' where NOMBRE_USUARIO = '%s'"; // password, username
     public static String QUERY_GETACCESSLEVEL = "select NOMBRE_USUARIO,TIPO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
-
+    public static String QUERY_CREATEACCOUNT = ""; // 
     // Esta es la línea donde se define la stored procedure (la cabecera)
     // INSERT_CICLO_FACTURABLE  (p_CODIGO_CICLO IN VARCHAR2,p_NOMBRE_CICLO IN VARCHAR2,p_TIEMPO_CICLO IN NUMBER,p_DESCRIPCION_CICLO IN VARCHAR2,p_DESCRIPCION_STATUS IN VARCHAR2,p_CODIGO_STATUS_CF IN VARCHAR2)
     // Para formar el query, simplemente añaden BEGIN al inicio y ;END; al final. Fue lo más que logré acortarlo sin que explotara.
