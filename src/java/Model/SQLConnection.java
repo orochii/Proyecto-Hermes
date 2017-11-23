@@ -29,15 +29,21 @@ public class SQLConnection {
     public static String QUERY_INSERTCANTON = "BEGIN INSERT_CANTON('%d', '%s');END;";
     public static String QUERY_INSERTDISTRICT = "BEGIN INSERT_DISTRITO('%d', '%s');END;";
     public static String QUERY_INSERTDIRECTION = "BEGIN INSERT_DIRECCION('%s', '%d', '%d', '%d');END;"; // zipcode, prov, distr, canton
-    
+
     // Esta es la línea donde se define la stored procedure (la cabecera)
     // INSERT_CICLO_FACTURABLE  (p_CODIGO_CICLO IN VARCHAR2,p_NOMBRE_CICLO IN VARCHAR2,p_TIEMPO_CICLO IN NUMBER,p_DESCRIPCION_CICLO IN VARCHAR2,p_DESCRIPCION_STATUS IN VARCHAR2,p_CODIGO_STATUS_CF IN VARCHAR2)
     // Para formar el query, simplemente añaden BEGIN al inicio y ;END; al final. Fue lo más que logré acortarlo sin que explotara.
     // Y le quitan eso del tipo de dato. Es básicamente como llamar una función en Java.
     public static String QUERY_INSERTBILLINGCYCLE = "BEGIN INSERT_CICLO_FACTURABLE('%s', '%s', %d, '%s', '%s', '%s');END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
-    
-    public static String QUERY_INSERT_CAMPANIA = "BEGIN INSERT_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s',);END;";
-    
+
+    String query_insert_campania = "BEGIN INSERT_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s');END;";
+
+    //DELETE
+    String query_delete_campania = "BEGIN DELETE_CAMPANIA('%s');END;";
+
+    //UPDATE
+    String query_update_campania = "BEGIN UPDATE_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s');END;";
+            
     private Connection con;
 
     public SQLConnection() {
@@ -54,8 +60,8 @@ public class SQLConnection {
     public QueryResultEnum queryAuthenticateUser(String username, String password) {
         String query = String.format(QUERY_AUTHENTICATE, username);
         RowSet rSet = doQuery(query);
-        if(rSet != null && rSet.success()) {
-            if (rSet != null && rSet.rows()>0) {
+        if (rSet != null && rSet.success()) {
+            if (rSet != null && rSet.rows() > 0) {
                 String realPass = rSet.getString("CONTRASENA");
                 String checkPass = MD5Generator.GetMD5(password);
                 if (realPass.equals(checkPass)) {
@@ -109,7 +115,7 @@ public class SQLConnection {
     public String queryUserKind(String username) {
         String query = String.format(QUERY_GETACCESSLEVEL, username);
         RowSet rSet = doQuery(query);
-        if(rSet != null && rSet.success()) {
+        if (rSet != null && rSet.success()) {
             String kind = rSet.getString("TIPO");
             return kind;
         }
@@ -151,34 +157,47 @@ public class SQLConnection {
         }
         return QueryResultEnum.SQLERROR;
     }
-    
+
     // Recuerden respetar el orden de las entradas de la función/stored procedure
     // codCiclo, nombre, tiempociclo, descC, descStatus, codStatus
-    public QueryResultEnum queryInsertBillingCycle(String codCiclo, String nombre, int tiempoCiclo, String descCiclo, 
+    public QueryResultEnum queryInsertBillingCycle(String codCiclo, String nombre, int tiempoCiclo, String descCiclo,
             String descStatus, String codStatus) {
         String query = String.format(QUERY_INSERTBILLINGCYCLE, codCiclo, nombre, tiempoCiclo, descCiclo, descStatus, codStatus);
         RowSet rSet = doQuery(query);
         System.out.println(rSet.success());
-        if(rSet != null && rSet.success()) {
+        if (rSet != null && rSet.success()) {
             return QueryResultEnum.SUCCESS;
         }
         return QueryResultEnum.SQLERROR;
     }
-    
-    
-     public QueryResultEnum queryInsertCampania(String codigo, String descripcion, String estado, String proposito,  String nombre, String tipo) {
-        String query = String.format(QUERY_INSERT_CAMPANIA, codigo, descripcion, estado, proposito, nombre, tipo);
+
+    public QueryResultEnum queryInsertCampania(String codigo, String descripcion, String estado, String proposito, String nombre, String tipo) {
+        String query = String.format(query_insert_campania, codigo, descripcion, estado, proposito, nombre, tipo);
         RowSet rSet = doQuery(query);
-        System.out.println(rSet.success());
-        if(rSet != null && rSet.success()) {
+        if (rSet != null && rSet.success()) {
             return QueryResultEnum.SUCCESS;
         }
         return QueryResultEnum.SQLERROR;
     }
-    
-    
-    
-    
+
+    public QueryResultEnum queryDeleteCampania(String codigo) {
+        String query = String.format(query_delete_campania, codigo);
+        RowSet rSet = doQuery(query);
+        if (rSet != null && rSet.success()) {
+            return QueryResultEnum.SUCCESS;
+        }
+        return QueryResultEnum.SQLERROR;
+    }
+
+    public QueryResultEnum queryUpdateCampania(String codigo, String descripcion, String estado, String proposito, String nombre, String tipo) {
+        String query = String.format(query_update_campania, codigo, descripcion, estado, proposito, nombre, tipo);
+        RowSet rSet = doQuery(query);
+        if (rSet != null && rSet.success()) {
+            return QueryResultEnum.SUCCESS;
+        }
+        return QueryResultEnum.SQLERROR;
+    }
+
     public void close() {
         try {
             if (con != null && !con.isClosed()) {
