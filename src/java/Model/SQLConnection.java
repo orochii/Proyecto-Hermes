@@ -39,7 +39,8 @@ public class SQLConnection {
     public static String QUERY_INSERTDIRECTION = "BEGIN INSERT_DIRECCION('%s', '%d', '%d', '%d');END;"; // zipcode, prov, distr, canton
     public static String QUERY_INSERTBILLINGCYCLE = "BEGIN INSERT_CICLO_FACTURABLE('%s', '%s', %d, '%s', '%s', '%s');END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
     public static String QUERY_INSERTCAMPANIA = "BEGIN INSERT_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s');END;";
-    public static String QUERY_INSERTCLIENT = "BEGIN INSERT_CLIENTE('%s', %d, %d, '%s', '%s', '%s', %t, '%s', '%s', %d, %d, %t);END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
+    //public static String QUERY_INSERTCLIENT = "BEGIN INSERT_CLIENTE('%s', %d, %d, '%s', '%s', '%s', %t, '%s', '%s', %d, %d, %t);END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
+    public static String QUERY_INSERTCLIENT = "BEGIN INSERT_CLIENTE('%s', %d, %d, '%s', '%s', '%s', '%s', '%s', '%s', %d, %d, '%s');END;";
     //DELETE
     public static String QUERY_DELETECAMPANIA = "BEGIN DELETE_CAMPANIA('%s');END;";
     //UPDATE
@@ -199,37 +200,13 @@ public class SQLConnection {
         }
         return QueryResultEnum.SQLERROR;
     }
-
     public QueryResultEnum queryInsertClient(String tipoIdent, int numeroIdent, int codigoPostal, String nombre, String estadoCivil, String email, String fechaNac,
             String sexo, String nacionalidad, int tiempoRec, int numeroDep, String fechaVenc) throws ParseException, SQLException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        java.util.Date fechaNacFormat = formatter.parse(fechaNac);
-        java.util.Date fechaVencFormat = formatter.parse(fechaVenc);
-        java.sql.Date fechaNacSql = new java.sql.Date(fechaNacFormat.getTime());
-        java.sql.Date fechaVencSql = new java.sql.Date(fechaVencFormat.getTime());
-        //       String query = String.format(QUERY_INSERTCLIENT, tipoIdent, numeroIdent, codigoPostal, nombre, estadoCivil, email, "TO_DATE("+fechaNac+", 'dd/MM/yyyy')", sexo, nacionalidad, tiempoRec, numeroDep, "TO_DATE("+vencimientoIdent+", 'dd/MM/yyyy')");
-        CallableStatement st = con.prepareCall("exec INSERT_CLIENTE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-        st.setString(1, tipoIdent);
-        st.setInt(2, numeroIdent);
-        st.setInt(3, codigoPostal);
-        st.setString(4, nombre);
-        st.setString(5, estadoCivil);
-        st.setString(6, email);
-        st.setDate(7, (Date) fechaNacSql);
-        st.setString(8, sexo);
-        st.setString(9, nacionalidad);
-        st.setInt(10, tiempoRec);
-        st.setInt(11, numeroDep);
-        st.setDate(12, (Date) fechaVencSql);
-        st.execute();
-        //  System.out.println("Primera "st);
-
-        // RowSet rSet = doQuery(query);
-        //  System.out.println(rSet.success());
-//        if(rSet != null && rSet.success()) {
-//            return QueryResultEnum.SUCCESS;
-//        }
+        String query = String.format(QUERY_INSERTCLIENT, tipoIdent, numeroIdent, codigoPostal, nombre, estadoCivil, email, fechaNac, sexo, nacionalidad, tiempoRec, numeroDep, fechaVenc);
+        RowSet rSet = doQuery(query);
+        if (rSet != null && rSet.success()) {
+            return QueryResultEnum.SUCCESS;
+        }
         return QueryResultEnum.SQLERROR;
     }
 
@@ -279,21 +256,7 @@ public class SQLConnection {
         return sqlDate;
     }
 
-
     public RowSet querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
-//        String tipo = "";
-//        String numero = "";
-//        String codigoPostal = "";
-//        String nombre = "";
-//        String estado = "";
-//        String email = "";
-//        String fechaNac = "";
-//        String sexo = "";
-//        String nacionalidad = "";
-//        String tiempoRec = "";
-//        String NumeroDep = "";
-//        String vencimientoIdent = "";
-
         CallableStatement st = con.prepareCall("{? = call SELECT_CLIENTE(?, ?)}");
         st.registerOutParameter(1, OracleTypes.CURSOR);
         st.setString(2, tipoIdent);
@@ -301,23 +264,6 @@ public class SQLConnection {
         st.execute();
         ResultSet rset = (ResultSet) st.getObject(1);
         RowSet rowSet = new RowSet(rset);
-//        while (rset.next()) {
-//            tipo = rset.getString("TIPO_IDENTIFICACION");
-//            numero = rset.getString("NUMERO_IDENTIFICACION");
-//            codigoPostal = rset.getNString("CODIGO_POSTAL_CLIENTE");
-//            nombre = rset.getNString("NOMBRE_CLIENTE");
-//            estado = rset.getNString("ESTADO_CIVIL");
-//            email = rset.getNString("EMAIL");
-//            fechaNac = rset.getNString("FECHANACIMIENTO");
-//            sexo = rset.getNString("SEXO");
-//            nacionalidad = rset.getNString("NACIONALIDAD");
-//            tiempoRec = rset.getNString("TIEMPO_RESIDENCIA_DOMICILIO");
-//            NumeroDep = rset.getNString("NUMERO_DEPENDIENTES");
-//            vencimientoIdent = rset.getNString("VENCIMIENTO_IDENTIFICACION");
-//        }
-        
-        //   ResultSet rs = (ResultSet)st.getObject(3);
-
         return rowSet;
 
     }
