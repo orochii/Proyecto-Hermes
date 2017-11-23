@@ -282,7 +282,6 @@ public class SQLConnection {
         return sqlDate;
     }
 
-<<<<<<< HEAD
     public RowSet querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
 //        String tipo = "";
 //        String numero = "";
@@ -322,18 +321,5 @@ public class SQLConnection {
         //   ResultSet rs = (ResultSet)st.getObject(3);
 
         return rowSet;
-=======
-    public QueryResultEnum querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
-        CallableStatement st = con.prepareCall("exec SELECT_CLIENTE(?, ?)");
-        st.registerOutParameter(1, OracleTypes.OTHER);
-        st.setString(2, tipoIdent);
-        st.setInt(3, numeroIdent);
-
-        st.execute();
-        ResultSet rs = (ResultSet) st.getObject(1);
-        String value = rs.getString(2);
-        System.out.println(value);
-        return QueryResultEnum.SQLERROR;
->>>>>>> origin/master
-    }
+}
 }
