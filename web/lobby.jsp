@@ -25,6 +25,7 @@
     <c:if test="${accessLevel > 5}">
         <p>Zona de Superusuario</p>
         <a href="insertBillingCycle">Insertar ciclo facturable</a><br>
+        <a href="insertCampania">Insertar Campaña</a><br>
         <a href="uploadDirections">Subir direcciones</a><br>
         <hr>
     </c:if>

@@ -36,6 +36,8 @@ public class SQLConnection {
     // Y le quitan eso del tipo de dato. Es básicamente como llamar una función en Java.
     public static String QUERY_INSERTBILLINGCYCLE = "BEGIN INSERT_CICLO_FACTURABLE('%s', '%s', %d, '%s', '%s', '%s');END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
     
+    public static String QUERY_INSERT_CAMPANIA = "BEGIN INSERT_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s',);END;";
+    
     private Connection con;
 
     public SQLConnection() {
@@ -162,6 +164,21 @@ public class SQLConnection {
         }
         return QueryResultEnum.SQLERROR;
     }
+    
+    
+     public QueryResultEnum queryInsertCampania(String codigo, String descripcion, String estado, String proposito,  String nombre, String tipo) {
+        String query = String.format(QUERY_INSERT_CAMPANIA, codigo, descripcion, estado, proposito, nombre, tipo);
+        RowSet rSet = doQuery(query);
+        System.out.println(rSet.success());
+        if(rSet != null && rSet.success()) {
+            return QueryResultEnum.SUCCESS;
+        }
+        return QueryResultEnum.SQLERROR;
+    }
+    
+    
+    
+    
     public void close() {
         try {
             if (con != null && !con.isClosed()) {
