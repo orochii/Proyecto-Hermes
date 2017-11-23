@@ -283,34 +283,15 @@ public class SQLConnection {
     }
 
     public QueryResultEnum querySelectClient(String tipoIdent, int numeroIdent) throws SQLException {
-<<<<<<< HEAD
-            System.out.println("hola");
         CallableStatement st = con.prepareCall("exec SELECT_CLIENTE(?, ?)");
-          st.registerOutParameter(1, OracleTypes.OTHER);
-            st.setString(2, tipoIdent);
-          st.setInt(3, numeroIdent);
-         
-          st.execute();
-          ResultSet rs = (ResultSet) st.getObject(1);
-          String value = rs.getString(2);
-	  System.out.println(value);
-          //  System.out.println("Primera "st);
-          
-           // RowSet rSet = doQuery(query);
-      //  System.out.println(rSet.success());
-=======
-        CallableStatement st = con.prepareCall("exec SELECT_CLIENTE(?, ?)");
-        st.setString(1, tipoIdent);
-        st.setInt(2, numeroIdent);
-        st.execute();
-        //  System.out.println("Primera "st);
+        st.registerOutParameter(1, OracleTypes.OTHER);
+        st.setString(2, tipoIdent);
+        st.setInt(3, numeroIdent);
 
-        // RowSet rSet = doQuery(query);
-        //  System.out.println(rSet.success());
->>>>>>> origin/master
-//        if(rSet != null && rSet.success()) {
-//            return QueryResultEnum.SUCCESS;
-//        }
+        st.execute();
+        ResultSet rs = (ResultSet) st.getObject(1);
+        String value = rs.getString(2);
+        System.out.println(value);
         return QueryResultEnum.SQLERROR;
     }
 }
