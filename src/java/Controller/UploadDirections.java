@@ -70,7 +70,7 @@ public class UploadDirections extends HttpServlet {
             QueryResultEnum result = con.queryAuthenticateUser(username, password);
             accessLevel = con.queryUserAccessLevel(username);
             request.setAttribute("accessLevel", accessLevel);
-            con.Close();
+            con.close();
             if(result==QueryResultEnum.SUCCESS) return true;
         }
         return false;

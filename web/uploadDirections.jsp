@@ -13,6 +13,7 @@
         </form>
         
         <hr>
+        <a href="/Proyecto-Hermes">Regresar</a>
     </c:if>
     <c:if test="${accessLevel < 9}">
         <meta http-equiv="refresh" content="3;url=/Proyecto-Hermes" />

@@ -74,7 +74,7 @@ public class DirectionReader {
             }
         }
         // Finalmente, cierra la conexión con la base de datos.
-        con.Close();
+        con.close();
         return result;
     }
 }

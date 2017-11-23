@@ -22,7 +22,7 @@ public class SQLConnection {
     private static String DB_PASSWORD = "123queso";
     // Query strings
     public static String QUERY_AUTHENTICATE = "select NOMBRE_USUARIO,CONTRASENA,ESTADO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
-    public static String QUERY_CHANGEPASS = "update USUARIO set CONTRASENA = '%s' where NOMBRE USUARIO = '%s'"; // username, password
+    public static String QUERY_CHANGEPASS = "update USUARIO set CONTRASENA = '%s' where NOMBRE_USUARIO = '%s'"; // password, username
     public static String QUERY_GETACCESSLEVEL = "select NOMBRE_USUARIO,TIPO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
 
     public static String QUERY_INSERTPROVINCE = "BEGIN INSERT_PROVINCIA('%d', '%s');END;";
@@ -144,7 +144,7 @@ public class SQLConnection {
         return QueryResultEnum.SQLERROR;
     }
 
-    public void Close() {
+    public void close() {
         try {
             if (con != null && !con.isClosed()) {
                 con.close();

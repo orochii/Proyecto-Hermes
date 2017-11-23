@@ -7,7 +7,7 @@
     <b>Bienvenido ${username}.</b>
     <hr>
     <p>Control de sesión</p>
-    <a href="">Cambiar contraseña</a><br>
+    <a href="changePassword">Cambiar contraseña</a><br>
     <a href="logoff">Cerrar sesión</a>
     <hr>
     <c:if test="${accessLevel > -1}">

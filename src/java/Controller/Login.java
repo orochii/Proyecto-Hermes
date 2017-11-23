@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
         QueryResultEnum result = con.queryAuthenticateUser(username, password);
         //con.queryChangePassword(username, password);
         // Close connection
-        con.Close();
+        con.close();
         
         HttpSession session = request.getSession();
         session.setAttribute("username", username);
