@@ -28,25 +28,22 @@ public class SQLConnection {
     public static String QUERY_CHANGEPASS = "update USUARIO set CONTRASENA = '%s' where NOMBRE_USUARIO = '%s'"; // password, username
     public static String QUERY_GETACCESSLEVEL = "select NOMBRE_USUARIO,TIPO from USUARIO where NOMBRE_USUARIO = '%s'"; // username
 
-    public static String QUERY_INSERTPROVINCE = "BEGIN INSERT_PROVINCIA('%d', '%s');END;";
-    public static String QUERY_INSERTCANTON = "BEGIN INSERT_CANTON('%d', '%s');END;";
-    public static String QUERY_INSERTDISTRICT = "BEGIN INSERT_DISTRITO('%d', '%s');END;";
-    public static String QUERY_INSERTDIRECTION = "BEGIN INSERT_DIRECCION('%s', '%d', '%d', '%d');END;"; // zipcode, prov, distr, canton
-
     // Esta es la línea donde se define la stored procedure (la cabecera)
     // INSERT_CICLO_FACTURABLE  (p_CODIGO_CICLO IN VARCHAR2,p_NOMBRE_CICLO IN VARCHAR2,p_TIEMPO_CICLO IN NUMBER,p_DESCRIPCION_CICLO IN VARCHAR2,p_DESCRIPCION_STATUS IN VARCHAR2,p_CODIGO_STATUS_CF IN VARCHAR2)
     // Para formar el query, simplemente añaden BEGIN al inicio y ;END; al final. Fue lo más que logré acortarlo sin que explotara.
     // Y le quitan eso del tipo de dato. Es básicamente como llamar una función en Java.
+    //INSERT
+    public static String QUERY_INSERTPROVINCE = "BEGIN INSERT_PROVINCIA('%d', '%s');END;";
+    public static String QUERY_INSERTCANTON = "BEGIN INSERT_CANTON('%d', '%s');END;";
+    public static String QUERY_INSERTDISTRICT = "BEGIN INSERT_DISTRITO('%d', '%s');END;";
+    public static String QUERY_INSERTDIRECTION = "BEGIN INSERT_DIRECCION('%s', '%d', '%d', '%d');END;"; // zipcode, prov, distr, canton
     public static String QUERY_INSERTBILLINGCYCLE = "BEGIN INSERT_CICLO_FACTURABLE('%s', '%s', %d, '%s', '%s', '%s');END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
-
-    String query_insert_campania = "BEGIN INSERT_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s');END;";
-    //DELETE
-    String query_delete_campania = "BEGIN DELETE_CAMPANIA('%s');END;";
-
-    //UPDATE
-    String query_update_campania = "BEGIN UPDATE_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s');END;";
-
+    public static String QUERY_INSERTCAMPANIA = "BEGIN INSERT_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s');END;";
     public static String QUERY_INSERTCLIENT = "BEGIN INSERT_CLIENTE('%s', %d, %d, '%s', '%s', '%s', %t, '%s', '%s', %d, %d, %t);END;"; // codCiclo, nombre, tiempociclo, descCiclo, descStatus, codStatus
+    //DELETE
+    public static String QUERY_DELETECAMPANIA = "BEGIN DELETE_CAMPANIA('%s');END;";
+    //UPDATE
+    public static String QUERY_UPDATE_CAMPANIA = "BEGIN UPDATE_CAMPANIA('%s', '%s', '%s', '%s', '%s', '%s');END;";
 
     private Connection con;
 
@@ -176,7 +173,7 @@ public class SQLConnection {
     }
 
     public QueryResultEnum queryInsertCampania(String codigo, String descripcion, String estado, String proposito, String nombre, String tipo) {
-        String query = String.format(query_insert_campania, codigo, descripcion, estado, proposito, nombre, tipo);
+        String query = String.format(QUERY_INSERTCAMPANIA, codigo, descripcion, estado, proposito, nombre, tipo);
         RowSet rSet = doQuery(query);
 
         if (rSet != null && rSet.success()) {
@@ -186,7 +183,7 @@ public class SQLConnection {
     }
 
     public QueryResultEnum queryDeleteCampania(String codigo) {
-        String query = String.format(query_delete_campania, codigo);
+        String query = String.format(QUERY_DELETECAMPANIA, codigo);
         RowSet rSet = doQuery(query);
         if (rSet != null && rSet.success()) {
             return QueryResultEnum.SUCCESS;
@@ -195,7 +192,7 @@ public class SQLConnection {
     }
 
     public QueryResultEnum queryUpdateCampania(String codigo, String descripcion, String estado, String proposito, String nombre, String tipo) {
-        String query = String.format(query_update_campania, codigo, descripcion, estado, proposito, nombre, tipo);
+        String query = String.format(QUERY_UPDATE_CAMPANIA, codigo, descripcion, estado, proposito, nombre, tipo);
         RowSet rSet = doQuery(query);
         if (rSet != null && rSet.success()) {
             return QueryResultEnum.SUCCESS;
