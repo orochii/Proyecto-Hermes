@@ -8,6 +8,9 @@ package Controller;
 import Model.QueryResultEnum;
 import Model.SQLConnection;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +27,7 @@ import javax.servlet.http.HttpSession;
 public class DeleteCampania extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         String codigo = request.getParameter("codigoCamp");
 
         if (codigo != null) {
@@ -47,7 +50,7 @@ public class DeleteCampania extends HttpServlet {
         }
     }
 
-    private boolean authenticateUser(HttpServletRequest request) {
+    private boolean authenticateUser(HttpServletRequest request) throws SQLException {
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
         if (username != null && !username.isEmpty()) {
@@ -75,7 +78,11 @@ public class DeleteCampania extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeleteCampania.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -89,7 +96,11 @@ public class DeleteCampania extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeleteCampania.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
